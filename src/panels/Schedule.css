@@ -1,0 +1,16 @@
+.Schedule {
+  display: block;
+  width: 100%;
+  margin: -1px auto;
+}
+#link {
+  display: flex;
+  justify-content: center;
+  border-top: 1px solid black;
+  width: 100%;
+}
+#footer {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
