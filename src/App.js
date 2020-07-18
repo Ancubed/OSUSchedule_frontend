@@ -3,7 +3,6 @@ import bridge from '@vkontakte/vk-bridge';
 import View from '@vkontakte/vkui/dist/components/View/View';
 import ScreenSpinner from '@vkontakte/vkui/dist/components/ScreenSpinner/ScreenSpinner';
 import '@vkontakte/vkui/dist/vkui.css';
-import { Scraper } from './scraper'
 import Home from './panels/Home';
 import Schedule from './panels/Schedule';
 
@@ -68,8 +67,16 @@ const App = () => {
 	function scrapSchedule(group, date) {
 		console.log(group);
 		console.log(date);
-		let src = new Scraper(group, date);
-		console.log(src.getSchedule());
+		const url = "http://localhost:3000/schedule?group=" + group + "&date=" + date;
+		fetch(url)
+        .then(function (response) {
+			console.log(response.status); // 200
+			return response.json();
+		})
+        .then(json => {
+            console.log(json);
+			console.log(typeof json);
+        });
 	}
 
 	return (
