@@ -2,7 +2,7 @@
   "name": "osu_schedule",
   "version": "1.0.0",
   "description": "",
-  "homepage": "https://Ancubed.github.io/osu_schedule/",
+  "homepage": "https://Ancubed.github.io/",
   "main": "index.js",
   "scripts": {
     "start": "cross-env PORT=10888 HTTPS=true react-scripts start",

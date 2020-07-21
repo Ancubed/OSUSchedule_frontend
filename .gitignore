@@ -8,7 +8,6 @@ npm-debug.log*
 package-lock.json
 /node_modules
 
-/bundle.zip
 
 # Optional npm cache directory
 .npm
