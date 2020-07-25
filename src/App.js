@@ -38,7 +38,8 @@ const App = () => {
 	const [date, setDate] = useState(new Date().toISOString().substr(0, 10));
 
 	const [activePanel, setActivePanel] = useState('home');
-	const [fetchedUser, setUser] = useState(null);
+	const [lessons, setLessons] = useState(['пусто']);
+	const [user, setUser] = useState(null);
 	const [popout, setPopout] = useState(<ScreenSpinner size='large' />);
 
 	useEffect(() => {
@@ -59,7 +60,7 @@ const App = () => {
 
 	const go = e => {
 		if (e.currentTarget.dataset.to === "schedule") {
-			scrapSchedule(e.currentTarget.dataset.group, e.currentTarget.dataset.date);
+			setLessons(scrapSchedule(e.currentTarget.dataset.group, e.currentTarget.dataset.date));
 		}
 		setActivePanel(e.currentTarget.dataset.to);
 	};
@@ -67,6 +68,7 @@ const App = () => {
 	function scrapSchedule(group, date) {
 		console.log(group);
 		console.log(date);
+		let lessons = {}
 		const url = "https://vk-miniapps-osu-schedule-back.herokuapp.com/schedule?group=" + group + "&date=" + date;
 		fetch(url)
         .then(function (response) {
@@ -76,7 +78,15 @@ const App = () => {
         .then(json => {
             console.log(json);
 			console.log(typeof json);
+			return json;
+		})
+		.then(json => {
+			lessons = json.lesson;
+		})
+		.catch(function (error) {
+			lessons = ['ошибка'];
 		});
+		return lessons;
 		// let url = "http://www.osu.ru/pages/schedule/?who=1&what=1&filial=1&group=" + group + "&mode=full";
 		// fetch(url)
         // .then(  
@@ -99,7 +109,7 @@ const App = () => {
 	return (
 		<View activePanel={activePanel} popout={popout}>
 			<Home id='home' faculty={faculty} course={course} group={group} date={date} go={go} />
-			<Schedule id='schedule' go={go} />
+			<Schedule id='schedule' lessons={lessons} go={go} />
 		</View>
 	);
 }

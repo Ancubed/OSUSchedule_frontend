@@ -12,11 +12,10 @@ import Icon24Back from '@vkontakte/icons/dist/24/back';
 
 
 const osName = platform();
-const numbers = ["ОСО", "ПИНЖ", "МАТ АНАЛИЗ", "физра", "англ. яз"];
 
 class Schedule extends React.Component {
 	constructor(props) {
-		super(props);
+		super(props);	
 	}
 	render() {
 		return (
@@ -29,7 +28,7 @@ class Schedule extends React.Component {
 				</PanelHeader>
 				<Group title="Schedule">
 					<Div id="Lessions">
-						<NumberList numbers={numbers} />
+						<NumberList numbers={this.props.lessons} />
 					</Div>
 				</Group>
 			</Panel>
