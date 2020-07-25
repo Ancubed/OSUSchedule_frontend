@@ -67,7 +67,7 @@ const App = () => {
 	function scrapSchedule(group, date) {
 		console.log(group);
 		console.log(date);
-		const url = "http://localhost:3000/schedule?group=" + group + "&date=" + date;
+		const url = "https://vk-miniapps-osu-schedule-back.herokuapp.com/schedule?group=" + group + "&date=" + date;
 		fetch(url)
         .then(function (response) {
 			console.log(response.status); // 200
@@ -76,7 +76,24 @@ const App = () => {
         .then(json => {
             console.log(json);
 			console.log(typeof json);
-        });
+		});
+		// let url = "http://www.osu.ru/pages/schedule/?who=1&what=1&filial=1&group=" + group + "&mode=full";
+		// fetch(url)
+        // .then(  
+		// 	function(response) {   
+		// 		console.log('Status Code: ' +  
+		// 		  response.status);  
+		// 		  console.log(response.type);
+		
+		// 	  // Examine the text in the response  
+		// 	  response.text().then(function(data) {  
+		// 		console.log(data);  
+		// 	  });  
+		// 	}  
+		//   )  
+		//   .catch(function(err) {  
+		// 	console.log('Fetch Error :-S', err);  
+		//   });
 	}
 
 	return (
