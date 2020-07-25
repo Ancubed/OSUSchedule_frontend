@@ -34,11 +34,9 @@ const App = () => {
 				],
 		'4aki': [{value: '00000', label: '17хз'},
 				],};
-	const groupNumbers = {'18Пинж(ба)РПиС': 11111, '19Пинж(ба)РПиС': 22222}
 	const [date, setDate] = useState(new Date().toISOString().substr(0, 10));
-
 	const [activePanel, setActivePanel] = useState('home');
-	const [lessons, setLessons] = useState(['пусто']);
+	const [lessons, setLessons] = useState(['Загрузка...']);
 	const [user, setUser] = useState(null);
 	const [popout, setPopout] = useState(<ScreenSpinner size='large' />);
 
@@ -60,50 +58,34 @@ const App = () => {
 
 	const go = e => {
 		if (e.currentTarget.dataset.to === "schedule") {
-			setLessons(scrapSchedule(e.currentTarget.dataset.group, e.currentTarget.dataset.date));
+			scrapSchedule(e.currentTarget.dataset.group, e.currentTarget.dataset.date).then(function(res) {
+				setLessons(res);
+			});
 		}
 		setActivePanel(e.currentTarget.dataset.to);
 	};
 
-	function scrapSchedule(group, date) {
+	async function scrapSchedule(group, date) {
 		console.log(group);
 		console.log(date);
-		let lessons = {}
+		let lessons = []
 		const url = "https://vk-miniapps-osu-schedule-back.herokuapp.com/schedule?group=" + group + "&date=" + date;
-		fetch(url)
-        .then(function (response) {
-			console.log(response.status); // 200
-			return response.json();
-		})
-        .then(json => {
-            console.log(json);
-			console.log(typeof json);
-			return json;
-		})
-		.then(json => {
-			lessons = json.lesson;
-		})
-		.catch(function (error) {
-			lessons = ['ошибка'];
-		});
+		let response = await fetch(url);
+		let json = await response.json();
+		lessons = await json.lesson;
+        // .then(function (response) {
+		// 	return response.json();
+		// })
+        // .then(json => {
+		// 	return json;
+		// })
+		// .then(json => {
+		// 	lessons = json.lesson;
+		// })
+		// .catch(function (error) {
+		// 	lessons = ['ошибка'];
+		// });
 		return lessons;
-		// let url = "http://www.osu.ru/pages/schedule/?who=1&what=1&filial=1&group=" + group + "&mode=full";
-		// fetch(url)
-        // .then(  
-		// 	function(response) {   
-		// 		console.log('Status Code: ' +  
-		// 		  response.status);  
-		// 		  console.log(response.type);
-		
-		// 	  // Examine the text in the response  
-		// 	  response.text().then(function(data) {  
-		// 		console.log(data);  
-		// 	  });  
-		// 	}  
-		//   )  
-		//   .catch(function(err) {  
-		// 	console.log('Fetch Error :-S', err);  
-		//   });
 	}
 
 	return (

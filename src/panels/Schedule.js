@@ -15,9 +15,10 @@ const osName = platform();
 
 class Schedule extends React.Component {
 	constructor(props) {
-		super(props);	
+		super(props);
 	}
 	render() {
+		const numbers = this.props.lessons;
 		return (
 			<Panel id={this.props.id}>
 				<PanelHeader
@@ -28,7 +29,7 @@ class Schedule extends React.Component {
 				</PanelHeader>
 				<Group title="Schedule">
 					<Div id="Lessions">
-						<NumberList numbers={this.props.lessons} />
+						<NumberList numbers={numbers} />
 					</Div>
 				</Group>
 			</Panel>
@@ -41,11 +42,10 @@ function ListItem(props) {
 }
 
 function NumberList(props) {
-	const numbers = props.numbers;
 	return (
 	  <ul>
-		{numbers.map((number) =>
-		  <ListItem key={number.toString()}
+		{props.numbers.map((number, index) =>
+		  <ListItem key={index}
 					value={number} />
 		)}
 	  </ul>
