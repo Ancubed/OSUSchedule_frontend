@@ -25,8 +25,8 @@ class Home extends React.Component {
 		this.state = {
 			groups: [{}],
 			group: '',
-			faculty: this.props.faculty[0].value,
-			course: this.props.course[0].value,
+			faculty: localStorage.getItem('faculty') || this.props.faculty[0].value,
+			course: localStorage.getItem('course') || this.props.course[0].value,
 			date: this.props.date,
 		}
 	}
@@ -46,9 +46,10 @@ class Home extends React.Component {
 			console.log(this.state.course);
 			this.loadGroups(this.state.faculty, this.state.course).then((groups) => {
 				console.log(groups);
+				localStorage.setItem('groups', groups);
 				this.setState({
 					groups: groups,
-					group: groups[0].value });
+					group: localStorage.getItem('group') || groups[0].value });
 			});
 		} catch (error) {
 			console.log('Ошибка! ' + error);
@@ -59,6 +60,7 @@ class Home extends React.Component {
 		try {
 			console.log(this.state.faculty);
 			console.log(e.target.value);
+			localStorage.setItem('course', e.target.value);
 			this.setState({ 
 				course: e.target.value 
 			});
@@ -77,6 +79,7 @@ class Home extends React.Component {
 		try {
 			console.log(this.state.course);
 			console.log(e.target.value);
+			localStorage.setItem('faculty', e.target.value);
 			this.setState({ 
 				faculty: e.target.value 
 			});
@@ -93,6 +96,7 @@ class Home extends React.Component {
 
 	changeGroup(e) {
 		try {
+			localStorage.setItem('group', e.target.value);
 			this.setState({group: e.target.value});
 		} catch (error) {
 			console.log('Нет такой группы');
@@ -150,33 +154,3 @@ class Home extends React.Component {
 }
 
 export default Home;
-// ЗАгрузка
-// class Example extends React.Component {
-
-// 	constructor (props) {
-  
-// 	  this.state = {
-// 		popout: null
-// 	  }
-// 	}
-  
-// 	onClick () {
-// 	  this.setState({ popout: <ScreenSpinner /> });
-// 	  setTimeout(() => { this.setState({ popout: null }) }, 2000);
-// 	}
-  
-// 	render () {
-// 	  return (
-// 		<View popout={this.state.popout} activePanel="spinner">
-// 		  <Panel id="spinner">
-// 			<PanelHeader>ScreenSpinner</PanelHeader>
-// 			<FormLayout>
-// 			  <CellButton onClick={this.onClick.bind(this)}>Запустить долгий процесс</CellButton>
-// 			</FormLayout>
-// 		  </Panel>
-// 		</View>
-// 	  )
-// 	}
-//   }
-  
-//   <Example />

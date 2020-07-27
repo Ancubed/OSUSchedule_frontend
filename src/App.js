@@ -34,7 +34,7 @@ const App = () => {
 	];
 	const [date, setDate] = useState(new Date().toISOString().substr(0, 10));
 	const [activePanel, setActivePanel] = useState('home');
-	const [lessons, setLessons] = useState(['Загрузка...']);
+	const [lessons, setLessons] = useState(['']);
 	const [user, setUser] = useState(null);
 	const [popout, setPopout] = useState(<ScreenSpinner size='large' />);
 
@@ -56,8 +56,10 @@ const App = () => {
 
 	const go = e => {
 		if (e.currentTarget.dataset.to === "schedule") {
+		setPopout(<ScreenSpinner />);
 			scrapSchedule(e.currentTarget.dataset.group, e.currentTarget.dataset.date).then(function(res) {
 				setLessons(res);
+				setPopout(null);
 			});
 		}
 		setActivePanel(e.currentTarget.dataset.to);
