@@ -8,32 +8,30 @@ import Schedule from './panels/Schedule';
 
 const App = () => {
 	const faculty = [
-		{value: 'fmit', label: 'ФМИТ'},
 		{value: 'aki', label: 'АКИ'},
-		{value: 'im', label: 'ИМ'},];
+		{value: 'asf', label: 'АСФ'},
+		{value: 'ggf', label: 'ГГФ'},
+		{value: 'im', label: 'ИМ'},
+		{value: 'isgim', label: 'ИСГИМ'},
+		{value: 'tf', label: 'ТФ'},
+		{value: 'fmit', label: 'ФМИТ'},
+		{value: 'fpbi', label: 'ФПБИ'},
+		{value: 'fppds', label: 'ФППДС'},
+		{value: 'ff', label: 'ФФ'},
+		{value: 'fef', label: 'ФЭФ'},
+		{value: 'fizf', label: 'ФизФ'},
+		{value: 'hbf', label: 'ХБФ'},
+		{value: 'eef', label: 'ЭЭФ'},
+		{value: 'uf', label: 'ЮФ'},
+	];
 	const course = [
 		{value: '1', label: '1 курс'},
 		{value: '2', label: '2 курс'},
 		{value: '3', label: '3 курс'},
 		{value: '4', label: '4 курс'},
-		{value: '5', label: '5 курс'},];
-	const group = {
-		'1fmit': [{value: '33333', label: '20Пинж(ба)РПиС'},
-		{value: '33331', label: '20ИВТ(ба)ОП'}],
-		'2fmit': [{value: '22222', label: '19Пинж(ба)РПиС'},
-				],
-		'3fmit': [{value: '11852', label: '18Пинж(ба)РПиС'},
-				],
-		'4fmit': [{value: '00000', label: '17Пинж(ба)РПиС'},
-				],
-		'1aki': [{value: '33333', label: '20хз'},
-				],
-		'2aki': [{value: '22222', label: '19хз'},
-				],
-		'3aki': [{value: '11111', label: '18хз'},
-				],
-		'4aki': [{value: '00000', label: '17хз'},
-				],};
+		{value: '5', label: '5 курс'},
+		{value: '6', label: '6 курс'},
+	];
 	const [date, setDate] = useState(new Date().toISOString().substr(0, 10));
 	const [activePanel, setActivePanel] = useState('home');
 	const [lessons, setLessons] = useState(['Загрузка...']);
@@ -73,24 +71,12 @@ const App = () => {
 		let response = await fetch(url);
 		let json = await response.json();
 		lessons = await json.lesson;
-        // .then(function (response) {
-		// 	return response.json();
-		// })
-        // .then(json => {
-		// 	return json;
-		// })
-		// .then(json => {
-		// 	lessons = json.lesson;
-		// })
-		// .catch(function (error) {
-		// 	lessons = ['ошибка'];
-		// });
 		return lessons;
 	}
 
 	return (
 		<View activePanel={activePanel} popout={popout}>
-			<Home id='home' faculty={faculty} course={course} group={group} date={date} go={go} />
+			<Home id='home' faculty={faculty} course={course} date={date} go={go} />
 			<Schedule id='schedule' lessons={lessons} go={go} />
 		</View>
 	);

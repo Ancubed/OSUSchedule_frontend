@@ -21,12 +21,73 @@ class Home extends React.Component {
 		this.changeGroup = this.changeGroup.bind(this);
 		this.changeCourse = this.changeCourse.bind(this);
 		this.changeFaculty = this.changeFaculty.bind(this);
+		this.loadGroups = this.loadGroups.bind(this);
 		this.state = {
-			groups: this.props.group[this.props.course[0].value+this.props.faculty[0].value],
-			group: this.props.group[this.props.course[0].value+this.props.faculty[0].value][0].value,
+			groups: [{}],
+			group: '',
 			faculty: this.props.faculty[0].value,
 			course: this.props.course[0].value,
 			date: this.props.date,
+		}
+	}
+
+	async loadGroups(faculty, potok) {
+		let groups = [];
+		const url = "https://vk-miniapps-osu-schedule-back.herokuapp.com/getgroups?faculty=" + faculty + "&potok=" + potok;
+		let response = await fetch(url);
+		let json = await response.json();
+		groups = await json['groups'];
+		return groups;
+	}
+
+	componentDidMount() {
+		try {
+			console.log(this.state.faculty);
+			console.log(this.state.course);
+			this.loadGroups(this.state.faculty, this.state.course).then((groups) => {
+				console.log(groups);
+				this.setState({
+					groups: groups,
+					group: groups[0].value });
+			});
+		} catch (error) {
+			console.log('Ошибка! ' + error);
+		}
+	}
+
+	changeCourse(e) {
+		try {
+			console.log(this.state.faculty);
+			console.log(e.target.value);
+			this.setState({ 
+				course: e.target.value 
+			});
+			this.loadGroups(this.state.faculty, e.target.value).then((groups) => {
+				console.log(groups);
+				this.setState({
+					groups: groups,
+					group: groups[0].value });
+			});
+		} catch (error) {
+			console.log('Ошибка! ' + error);
+		}
+	}
+
+	changeFaculty(e) {
+		try {
+			console.log(this.state.course);
+			console.log(e.target.value);
+			this.setState({ 
+				faculty: e.target.value 
+			});
+			this.loadGroups(e.target.value, this.state.course).then((groups) => {
+				console.log(groups);
+				this.setState({
+					groups: groups,
+					group: groups[0].value });
+			});
+		} catch (error) {
+			console.log('Ошибка! ' + error);
 		}
 	}
 
@@ -35,22 +96,6 @@ class Home extends React.Component {
 			this.setState({group: e.target.value});
 		} catch (error) {
 			console.log('Нет такой группы');
-		}
-	}
-
-	changeCourse(e) {
-		try {
-			this.setState({course: e.target.value, groups: this.props.group[e.target.value+this.state.faculty], group: this.props.group[e.target.value+this.state.faculty][0].value});
-		} catch (error) {
-			console.log('Нет такого курса на факультете');
-		}
-	}
-
-	changeFaculty(e) {
-		try {
-			this.setState({faculty: e.target.value, groups: this.props.group[this.state.course+e.target.value], group: this.props.group[this.state.course+e.target.value][0].value});
-		} catch (error) {
-			console.log('Нет такого курса на факультете');
 		}
 	}
 
@@ -80,7 +125,7 @@ class Home extends React.Component {
 							{this.props.course.map((cour) => 
 							<option value={cour.value}>{cour.label}</option>)}
 						</Select>
-						<Select value={this.state.group} onChange={this.changeGroup} placeholder="Группа"
+						<Select onChange={this.changeGroup} placeholder="Группа"
 						value={this.state.group}>
 							{this.state.groups.map((grop) => 
 							<option value={grop.value}>{grop.label}</option>)}
