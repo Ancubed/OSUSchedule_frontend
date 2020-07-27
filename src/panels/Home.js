@@ -112,7 +112,6 @@ class Home extends React.Component {
 	}
 
 	render() {
-		const state = this.state;
 		return (
 			<Panel id={this.props.id}>
 				<PanelHeader>Расписание ОГУ</PanelHeader>
