@@ -44,13 +44,10 @@ class Home extends React.Component {
 
 	componentDidMount() {
 		try {
-			console.log(this.state.faculty);
-			console.log(this.state.course);
 			this.setState({
 				loadGroups: true,
 			});
 			this.loadGroups(this.state.faculty, this.state.course).then((groups) => {
-				console.log(groups);
 				localStorage.setItem('groups', groups);
 				this.setState({
 					groups: groups,
@@ -65,15 +62,12 @@ class Home extends React.Component {
 
 	changeCourse(e) {
 		try {
-			console.log(this.state.faculty);
-			console.log(e.target.value);
 			localStorage.setItem('course', e.target.value);
 			this.setState({ 
 				course: e.target.value,
 				loadGroups: true,
 			});
 			this.loadGroups(this.state.faculty, e.target.value).then((groups) => {
-				console.log(groups);
 				localStorage.setItem('group', groups[0].value);
 				this.setState({
 					groups: groups,
@@ -88,15 +82,12 @@ class Home extends React.Component {
 
 	changeFaculty(e) {
 		try {
-			console.log(this.state.course);
-			console.log(e.target.value);
 			localStorage.setItem('faculty', e.target.value);
 			this.setState({ 
 				faculty: e.target.value,
 				loadGroups: true
 			});
 			this.loadGroups(e.target.value, this.state.course).then((groups) => {
-				console.log(groups);
 				localStorage.setItem('group', groups[0].value);
 				this.setState({
 					groups: groups,

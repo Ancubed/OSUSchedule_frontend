@@ -33,8 +33,16 @@ const App = () => {
 		{value: '6', label: '6 курс'},
 	];
 	const [date, setDate] = useState(new Date().toISOString().substr(0, 10));
+	const [dateForSchedule, setDateForSchedule] = useState('');
 	const [activePanel, setActivePanel] = useState('home');
-	const [lessons, setLessons] = useState(['']);
+	const [lessons, setLessons] = useState([{
+		numberOfLesson: 0,
+		isSingle: true,
+		lessonName: "",
+		lessonType: "",
+		auditorium: "",
+		teacher: ""
+		}]);
 	const [user, setUser] = useState(null);
 	const [popout, setPopout] = useState(<ScreenSpinner size='large' />);
 
@@ -57,29 +65,39 @@ const App = () => {
 	const go = e => {
 		if (e.currentTarget.dataset.to === "schedule") {
 		setPopout(<ScreenSpinner />);
-			scrapSchedule(e.currentTarget.dataset.group, e.currentTarget.dataset.date).then(function(res) {
-				setLessons(res);
+			scrapSchedule(e.currentTarget.dataset.group, e.currentTarget.dataset.date).then(function(json) {
+				setLessons(json.lessons);
+				setDateForSchedule(json.date);
 				setPopout(null);
 			});
+		}
+		else if (e.currentTarget.dataset.to === "home") {
+			setLessons([{
+				numberOfLesson: 0,
+				isSingle: true,
+				lessonName: "",
+				lessonType: "",
+				auditorium: "",
+				teacher: ""
+				}]);
+				setDateForSchedule('')
 		}
 		setActivePanel(e.currentTarget.dataset.to);
 	};
 
 	async function scrapSchedule(group, date) {
-		console.log(group);
-		console.log(date);
 		let lessons = []
 		const url = "https://vk-miniapps-osu-schedule-back.herokuapp.com/schedule?group=" + group + "&date=" + date;
 		let response = await fetch(url);
 		let json = await response.json();
-		lessons = await json.lesson;
+		lessons = await json;
 		return lessons;
 	}
 
 	return (
 		<View activePanel={activePanel} popout={popout}>
 			<Home id='home' faculty={faculty} course={course} date={date} go={go} />
-			<Schedule id='schedule' lessons={lessons} go={go} />
+			<Schedule id='schedule' lessons={lessons} dateForSchedule={dateForSchedule} go={go} />
 		</View>
 	);
 }

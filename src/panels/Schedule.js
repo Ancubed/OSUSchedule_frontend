@@ -18,7 +18,8 @@ class Schedule extends React.Component {
 		super(props);
 	}
 	render() {
-		const numbers = this.props.lessons;
+		const lessons = this.props.lessons;
+		const date = this.props.dateForSchedule;
 		return (
 			<Panel id={this.props.id}>
 				<PanelHeader
@@ -29,7 +30,10 @@ class Schedule extends React.Component {
 				</PanelHeader>
 				<Group title="Schedule">
 					<Div id="Lessions">
-						<NumberList numbers={numbers} />
+						<Title level="3" weight="semibold">{date}</Title>
+					</Div>
+					<Div id="Lessions">
+						<NumberList lessons={lessons} />
 					</Div>
 				</Group>
 			</Panel>
@@ -38,16 +42,17 @@ class Schedule extends React.Component {
 }
 
 function ListItem(props) {
-	return <Title level="2" weight="semibold" style={{ marginBottom: 16 }}>{props.value}</Title>
+	return <Title level="3" weight="bold" style={{ marginBottom: 16 }}>{props.value}</Title>
 }
 
 function NumberList(props) {
 	return (
 	  <ul>
-		{props.numbers.map((number, index) =>
-		  <ListItem key={index}
-					value={number} />
-		)}
+		{props.lessons.map((lesson, index) => 
+			lesson.isSingle ?
+			<ListItem key={index} value={lesson.lessonName} />:
+			<ListItem key={index} value={lesson.subGroups[0].lessonName} />)
+		}
 	  </ul>
 	);
   }
