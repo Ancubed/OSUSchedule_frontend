@@ -20,6 +20,7 @@ class Schedule extends React.Component {
 	render() {
 		const lessons = this.props.lessons;
 		const date = this.props.dateForSchedule;
+		const lessonsIsEmpty = (lessons.length === 0);
 		return (
 			<Panel id={this.props.id}>
 				<PanelHeader
@@ -30,10 +31,12 @@ class Schedule extends React.Component {
 				</PanelHeader>
 				<Group title="Schedule">
 					<Div id="Lessions">
-						<Title level="3" weight="semibold">{date}</Title>
+						<Title level="2" weight="semibold">{date}</Title>
 					</Div>
 					<Div id="Lessions">
-						<NumberList lessons={lessons} />
+						{lessonsIsEmpty
+						? <Title level="2" weight="semibold">{'В этот день у группы нет пар.'}</Title>
+						: <NumberList lessons={lessons} />}
 					</Div>
 				</Group>
 			</Panel>
