@@ -2,6 +2,7 @@ import React from 'react';
 import Panel from '@vkontakte/vkui/dist/components/Panel/Panel';
 import Div from '@vkontakte/vkui/dist/components/Div/Div';
 import PanelHeader from '@vkontakte/vkui/dist/components/PanelHeader/PanelHeader';
+import Spinner from '@vkontakte/vkui/dist/components/Spinner/Spinner';
 import Button from '@vkontakte/vkui/dist/components/Button/Button';
 import Group from '@vkontakte/vkui/dist/components/Group/Group';
 import Link from '@vkontakte/vkui/dist/components/Link/Link';
@@ -25,9 +26,10 @@ class Home extends React.Component {
 		this.state = {
 			groups: [{}],
 			group: '',
+			groupLoading: false,
 			faculty: localStorage.getItem('faculty') || this.props.faculty[0].value,
 			course: localStorage.getItem('course') || this.props.course[0].value,
-			date: this.props.date,
+			date: sessionStorage.getItem('date') || this.props.date,
 		}
 	}
 
@@ -44,12 +46,17 @@ class Home extends React.Component {
 		try {
 			console.log(this.state.faculty);
 			console.log(this.state.course);
+			this.setState({
+				loadGroups: true,
+			});
 			this.loadGroups(this.state.faculty, this.state.course).then((groups) => {
 				console.log(groups);
 				localStorage.setItem('groups', groups);
 				this.setState({
 					groups: groups,
-					group: localStorage.getItem('group') || groups[0].value });
+					group: localStorage.getItem('group') || groups[0].value,
+					loadGroups: false,
+				});
 			});
 		} catch (error) {
 			console.log('Ошибка! ' + error);
@@ -62,13 +69,17 @@ class Home extends React.Component {
 			console.log(e.target.value);
 			localStorage.setItem('course', e.target.value);
 			this.setState({ 
-				course: e.target.value 
+				course: e.target.value,
+				loadGroups: true,
 			});
 			this.loadGroups(this.state.faculty, e.target.value).then((groups) => {
 				console.log(groups);
+				localStorage.setItem('group', groups[0].value);
 				this.setState({
 					groups: groups,
-					group: groups[0].value });
+					group: groups[0].value,
+					loadGroups: false,
+				 });
 			});
 		} catch (error) {
 			console.log('Ошибка! ' + error);
@@ -81,13 +92,17 @@ class Home extends React.Component {
 			console.log(e.target.value);
 			localStorage.setItem('faculty', e.target.value);
 			this.setState({ 
-				faculty: e.target.value 
+				faculty: e.target.value,
+				loadGroups: true
 			});
 			this.loadGroups(e.target.value, this.state.course).then((groups) => {
 				console.log(groups);
+				localStorage.setItem('group', groups[0].value);
 				this.setState({
 					groups: groups,
-					group: groups[0].value });
+					group: groups[0].value,
+					loadGroups: false,
+				});
 			});
 		} catch (error) {
 			console.log('Ошибка! ' + error);
@@ -105,6 +120,7 @@ class Home extends React.Component {
 
 	changeDate(e) {
 		try {
+			sessionStorage.setItem('date', e.target.value);
 			this.setState({date: e.target.value});
 		} catch (error) {
 			console.log('Дата неверна');
@@ -128,11 +144,12 @@ class Home extends React.Component {
 							{this.props.course.map((cour) => 
 							<option value={cour.value}>{cour.label}</option>)}
 						</Select>
+						{this.state.loadGroups ? <Spinner size='medium'/> :
 						<Select onChange={this.changeGroup} placeholder="Группа"
 						value={this.state.group}>
 							{this.state.groups.map((grop) => 
 							<option value={grop.value}>{grop.label}</option>)}
-						</Select>
+						</Select>}
 					</FormLayoutGroup>
 					<FormLayoutGroup top="Дата">
 						<Input type="date"onChange={this.changeDate}
