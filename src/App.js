@@ -44,7 +44,8 @@ const App = () => {
 		teacher: ""
 		}]);
 	const [user, setUser] = useState(null);
-	const [popout, setPopout] = useState(<ScreenSpinner size='large' />);
+	const [popout, setPopout] = useState(null);
+	const [modal, setModal] = useState(null);
 
 	useEffect(() => {
 		bridge.subscribe(({ detail: { type, data }}) => {
@@ -54,12 +55,6 @@ const App = () => {
 				document.body.attributes.setNamedItem(schemeAttribute);
 			}
 		});
-		async function fetchData() {
-			const user = await bridge.send('VKWebAppGetUserInfo');
-			setUser(user);
-			setPopout(null);
-		}
-		fetchData();
 	}, []);
 
 	const go = e => {
@@ -95,7 +90,7 @@ const App = () => {
 	}
 
 	return (
-		<View activePanel={activePanel} popout={popout}>
+		<View activePanel={activePanel} popout={popout} modal={modal}>
 			<Home id='home' faculty={faculty} course={course} date={date} go={go} />
 			<Schedule id='schedule' lessons={lessons} dateForSchedule={dateForSchedule} go={go} />
 		</View>

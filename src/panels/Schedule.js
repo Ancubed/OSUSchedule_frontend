@@ -11,16 +11,24 @@ import Icon24Back from '@vkontakte/icons/dist/24/back';
 import Headline from '@vkontakte/vkui/dist/components/Typography/Headline/Headline';
 import Subhead from '@vkontakte/vkui/dist/components/Typography/Subhead/Subhead';
 import Text from '@vkontakte/vkui/dist/components/Typography/Text/Text';
+import ModalRoot from '@vkontakte/vkui/dist/components/ModalRoot/ModalRoot';
+import ModalCard from '@vkontakte/vkui/dist/components/ModalCard/ModalCard';
+import Button from '@vkontakte/vkui/dist/components/Button/Button';
 
 
 const osName = platform();
+const MODAL_CARD_FULL_INFO = 'pairFullInfo';
 
 class Schedule extends React.Component {
 	constructor(props) {
 		super(props);
+		this.state = {
+			activeModal: null,
+			modalHistory: []
+		  };
 	}
 	render() {
-		//const lessons = this.props.lessons;
+				//const lessons = this.props.lessons;
 		const lessons = [
 			{
 				numberOfLesson: 1,
@@ -127,7 +135,7 @@ function NotSingleGroupPair(props) {
 			</Div>
 			<Div id='infoOfSubGroups'>
 				{props.lesson.subGroups.map((subGroup, index) => 
-					<Div className='infoOfSingleSubGroup'>
+					<Div key={index} className='infoOfSingleSubGroup'>
 						<Div className='infoOfPair'>
 							<Div className='nameOfPair'>
 								<Subhead weight="regular">{subGroup.lessonName}</Subhead>
