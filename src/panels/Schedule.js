@@ -11,21 +11,14 @@ import Icon24Back from '@vkontakte/icons/dist/24/back';
 import Headline from '@vkontakte/vkui/dist/components/Typography/Headline/Headline';
 import Subhead from '@vkontakte/vkui/dist/components/Typography/Subhead/Subhead';
 import Text from '@vkontakte/vkui/dist/components/Typography/Text/Text';
-import ModalRoot from '@vkontakte/vkui/dist/components/ModalRoot/ModalRoot';
-import ModalCard from '@vkontakte/vkui/dist/components/ModalCard/ModalCard';
-import Button from '@vkontakte/vkui/dist/components/Button/Button';
+import Icon16InfoOutline from '@vkontakte/icons/dist/16/info_outline';
 
 
 const osName = platform();
-const MODAL_CARD_FULL_INFO = 'pairFullInfo';
 
 class Schedule extends React.Component {
 	constructor(props) {
 		super(props);
-		this.state = {
-			activeModal: null,
-			modalHistory: []
-		  };
 	}
 	render() {
 				//const lessons = this.props.lessons;
@@ -33,42 +26,41 @@ class Schedule extends React.Component {
 			{
 				numberOfLesson: 1,
 				isSingle: true,
-				lessonName: 'Прим пары',
+				lessonName: 'Комп. сети',
 				lessonType: 'лекционное занятие',
 				auditorium: '2-103',
-				teacher: 'Пример П.П.'},
+				teacher: 'Горбачев Д. В.'},
 			{
 				numberOfLesson: 2,
 				isSingle: true,
-				lessonName: 'Прим пары',
-				lessonType: 'парктическое занятие',
-				auditorium: '1-203',
-				teacher: 'Пример П.П.'},
+				lessonName: 'WEB-программирование',
+				lessonType: 'практическое занятие',
+				auditorium: '1-303',
+				teacher: 'Тагирова М. В.'},
 			{
 				numberOfLesson: 3,
 				isSingle: false,
 				subGroups: [
 					{
-						lessonName: 'Прим пары 1',
+						lessonName: 'Физ-ра (ю)',
 						lessonType: 'прaктическое занятие',
-						auditorium: '1-201',
-						teacher: 'Пример П.П.'
+						auditorium: '18-201',
+						teacher: 'Мышин П.П.'
 					},
 					{
-						lessonName: 'Прим пары 2',
+						lessonName: 'Физ-ра (д)',
 						lessonType: 'парктическое занятие',
 						auditorium: '1-202',
-						teacher: 'Пример П.П.'
+						teacher: 'Валенок П.П.'
 					},
 					{
-						lessonName: 'Прим пары 3',
+						lessonName: 'Физ-ра (с)',
 						lessonType: 'парктическое занятие',
 						auditorium: '1-203',
-						teacher: 'Пример П.П.'
+						teacher: 'Одноног П.П.'
 					},
 			]}
 		]
-		console.log(lessons);
 		const date = this.props.dateForSchedule;
 		const lessonsIsEmpty = (lessons.length === 0);
 		return (
@@ -86,7 +78,7 @@ class Schedule extends React.Component {
 					<Div id="lessions">
 						{lessonsIsEmpty
 						? <Title level="2" weight="semibold">{'У группы нет пар в этот день.'}</Title>
-						: <PairList lessons={lessons} />}
+						: <PairList lessons={lessons} modalcallback={this.props.modalcallback}/>}
 					</Div>
 				</Group>
 			</Panel>
@@ -99,8 +91,8 @@ function PairList(props) {
 		<Div id="pairList">
 			{props.lessons.map((lesson, index) => 
 				lesson.isSingle ?
-				<SingleGroupPair key={index} lesson={lesson} />:
-				<NotSingleGroupPair key={index} lesson={lesson} />)
+				<SingleGroupPair key={index} lesson={lesson} modalcallback={props.modalcallback}/>:
+				<NotSingleGroupPair key={index} lesson={lesson} modalcallback={props.modalcallback}/>)
 			}
 	  	</Div>
 	);
@@ -108,7 +100,13 @@ function PairList(props) {
 
 function SingleGroupPair(props) {
 	return (
-		<Div className='pair single'>
+		<Div className='pair single' onClick={props.modalcallback} 
+		data-issingle={props.lesson.isSingle}
+		data-lessonname={props.lesson.lessonName}
+		data-lessontype={props.lesson.lessonType}
+		data-numberoflesson={props.lesson.numberOfLesson}
+		data-auditorium={props.lesson.auditorium}
+		data-teacher={props.lesson.teacher}>
 			<Div className='numberOfPair'>
 				<Headline weight="regular">{props.lesson.numberOfLesson}</Headline>
 			</Div>
@@ -123,6 +121,9 @@ function SingleGroupPair(props) {
 			<Div className='auditoriumOfPair'>
 				<Subhead id='textOfAuditorium' weight="medium">{props.lesson.auditorium}</Subhead>
 			</Div>
+			<Div className='icon'>
+				<info_outline width={20} height={20} />
+			</Div>
 		</Div>
 	);
 }
@@ -135,7 +136,13 @@ function NotSingleGroupPair(props) {
 			</Div>
 			<Div id='infoOfSubGroups'>
 				{props.lesson.subGroups.map((subGroup, index) => 
-					<Div key={index} className='infoOfSingleSubGroup'>
+					<Div key={index} className='infoOfSingleSubGroup' onClick={props.modalcallback}
+					data-issingle={props.lesson.isSingle}
+					data-lessonname={subGroup.lessonName}
+					data-lessontype={subGroup.lessonType}
+					data-numberoflesson={props.lesson.numberOfLesson}
+					data-auditorium={subGroup.auditorium}
+					data-teacher={subGroup.teacher}>
 						<Div className='infoOfPair'>
 							<Div className='nameOfPair'>
 								<Subhead weight="regular">{subGroup.lessonName}</Subhead>
