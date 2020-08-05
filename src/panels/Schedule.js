@@ -21,7 +21,7 @@ class Schedule extends React.Component {
 		super(props);
 	}
 	render() {
-				//const lessons = this.props.lessons;
+		//const lessons = this.props.lessons;
 		const lessons = [
 			{
 				numberOfLesson: 1,
@@ -63,6 +63,7 @@ class Schedule extends React.Component {
 		]
 		const date = this.props.dateForSchedule;
 		const lessonsIsEmpty = (lessons.length === 0);
+
 		return (
 			<Panel id={this.props.id}>
 				<PanelHeader
@@ -87,6 +88,7 @@ class Schedule extends React.Component {
 }
 
 function PairList(props) {
+
 	return (
 		<Div id="pairList">
 			{props.lessons.map((lesson, index) => 
@@ -99,6 +101,7 @@ function PairList(props) {
 }
 
 function SingleGroupPair(props) {
+
 	return (
 		<Div className='pair single' onClick={props.modalcallback} 
 		data-issingle={props.lesson.isSingle}
@@ -112,7 +115,7 @@ function SingleGroupPair(props) {
 			</Div>
 			<Div className='infoOfPair'>
 				<Div className='nameOfPair'>
-					<Subhead weight="regular">{props.lesson.lessonName}</Subhead>
+					<Subhead weight="bold">{props.lesson.lessonName}</Subhead>
 				</Div>
 				<Div className='typeOfPair'>
 					<Text weight="regular">{props.lesson.lessonType}</Text>
@@ -121,14 +124,15 @@ function SingleGroupPair(props) {
 			<Div className='auditoriumOfPair'>
 				<Subhead id='textOfAuditorium' weight="medium">{props.lesson.auditorium}</Subhead>
 			</Div>
-			<Div className='icon'>
-				<info_outline width={20} height={20} />
+			<Div className='infoIcon'>
+				<Icon16InfoOutline width={17} height={17} />
 			</Div>
 		</Div>
 	);
 }
 
 function NotSingleGroupPair(props) {
+
 	return (
 		<Div className='pair notSingle'>
 			<Div className='numberOfPair'>
@@ -145,7 +149,7 @@ function NotSingleGroupPair(props) {
 					data-teacher={subGroup.teacher}>
 						<Div className='infoOfPair'>
 							<Div className='nameOfPair'>
-								<Subhead weight="regular">{subGroup.lessonName}</Subhead>
+								<Subhead weight="bold">{subGroup.lessonName}</Subhead>
 							</Div>
 							<Div className='typeOfPair'>
 								<Text weight="regular">{subGroup.lessonType}</Text>
@@ -153,6 +157,9 @@ function NotSingleGroupPair(props) {
 						</Div>
 						<Div className='auditoriumOfPair'>
 							<Subhead id='textOfAuditorium' weight="medium">{subGroup.auditorium}</Subhead>
+						</Div>
+						<Div className='infoIcon'>
+							<Icon16InfoOutline width={17} height={17} />
 						</Div>
 					</Div>
 					)

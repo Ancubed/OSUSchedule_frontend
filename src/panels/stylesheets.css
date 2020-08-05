@@ -1,0 +1,118 @@
+body[scheme="space_gray"] {
+  --gray: #363738;
+  --black: #19191A;
+}
+body[scheme="bright_light"] {
+  --gray: #0000001F;
+  --black: #0000000D;
+}
+.Schedule {
+  display: block;
+  width: 100%;
+  margin: -1px auto;
+}
+#link {
+  display: flex;
+  justify-content: center;
+  border-top: 1px solid black;
+  width: 100%;
+}
+#footer {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+#date {
+  margin-top: 10px;
+  display: flex;
+  justify-content: space-around;
+}
+#lessions {
+  padding: 0px;
+  margin: 10px 0px 0px 0px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-around;
+  min-height: 65vh;
+}
+#pairList {
+  padding: 0px;
+  margin: 0px;
+  width: 95%;
+}
+.pair {
+  padding: 0px;
+  margin: 0px 0px 8px 0px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  border: 1px solid  var(--gray);
+  background-color: var(--black);
+  border-radius: 4px;
+  width: 100%;
+}
+.single:active,  .infoOfSingleSubGroup:active {
+  background-color: var(--gray);
+  box-shadow: 0 0 4px black inset;
+}
+.numberOfPair, .infoIcon{
+  width: 5vw;
+  padding: 0px;
+  margin: 0px;
+}
+.numberOfPair {
+  margin-left: 3vw;
+}
+.infoOfPair {
+  margin: 0px;
+  padding: 10px 0px 10px 0px;
+  border-left: 1px solid var(--gray);
+  border-right: 1px solid var(--gray);
+  width: 52vw;
+}
+.nameOfPair, .typeOfPair {
+  padding: 0px 0px 5px 5px;  
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  white-space: nowrap;
+}
+.nameOfPair {
+  border-bottom: 1px solid var(--gray);
+}
+.auditoriumOfPair {
+  padding: 0px;
+  width: 16vw;
+  display: flex;
+  justify-content: center;
+  white-space: nowrap;
+}
+#textOfAuditorium {
+  font-size: large;
+  text-align: center;
+}
+#infoOfSubGroups {
+  padding: 0px;
+  margin: 0px;
+  display: flex;
+  flex-direction: column;
+  width: 87%;
+}
+.infoOfSingleSubGroup {
+  padding: 0px;
+  margin: 0px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--gray);
+}
+.infoIcon {
+  margin-right: 2vw;
+}
+.modalCardDiv {
+  border-bottom: 1px solid var(--gray);
+}
+

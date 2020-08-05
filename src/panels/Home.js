@@ -12,7 +12,7 @@ import Input from '@vkontakte/vkui/dist/components/Input/Input';
 import FormLayoutGroup from '@vkontakte/vkui/dist/components/FormLayoutGroup/FormLayoutGroup';
 
 import logo from '../img/logo.png';
-import './Schedule.css';
+import './stylesheets.css';
 
 
 class Home extends React.Component {
