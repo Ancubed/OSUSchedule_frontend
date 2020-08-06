@@ -1,10 +1,10 @@
+body {
+  --gray: #0000001F;
+  --black: #0000000D;
+}
 body[scheme="space_gray"] {
   --gray: #363738;
   --black: #19191A;
-}
-body[scheme="bright_light"] {
-  --gray: #0000001F;
-  --black: #0000000D;
 }
 .Schedule {
   display: block;
@@ -114,5 +114,15 @@ body[scheme="bright_light"] {
 }
 .modalCardDiv {
   border-bottom: 1px solid var(--gray);
+}
+.homework {
+  margin: 0px;
+  padding: 0px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+}
+#shareButton {
 }
 

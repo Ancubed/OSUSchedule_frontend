@@ -11,6 +11,11 @@ import Div from '@vkontakte/vkui/dist/components/Div/Div';
 import Subhead from '@vkontakte/vkui/dist/components/Typography/Subhead/Subhead';
 import Headline from '@vkontakte/vkui/dist/components/Typography/Headline/Headline';
 import Textarea from '@vkontakte/vkui/dist/components/Textarea/Textarea';
+import Icon24Share from '@vkontakte/icons/dist/24/share';
+import Icon16Done from '@vkontakte/icons/dist/16/done';
+import Button from '@vkontakte/vkui/dist/components/Button/Button';
+import Snackbar from '@vkontakte/vkui/dist/components/Snackbar/Snackbar';
+import Avatar from "@vkontakte/vkui/dist/components/Avatar/Avatar";
 
 
 const App = () => {
@@ -54,6 +59,8 @@ const App = () => {
 	const [date, setDate] = useState(new Date().toISOString().substr(0, 10));
 	const [dateForSchedule, setDateForSchedule] = useState('');
 	const [activePanel, setActivePanel] = useState('home');
+	const [snackbar, setSnackbar] = useState(null);
+	const [fetchedUser, setUser] = useState(null);
 	const [lessons, setLessons] = useState([{
 		numberOfLesson: 0,
 		isSingle: true,
@@ -80,6 +87,12 @@ const App = () => {
 				document.body.attributes.setNamedItem(schemeAttribute);
 			}
 		});
+		async function fetchData() {
+			const user = await bridge.send('VKWebAppGetUserInfo');
+			setUser(user);
+			setPopout(null);
+		}
+		fetchData();
 	}, []);
 	
 	const modalcallback = e => {
@@ -133,6 +146,37 @@ const App = () => {
 			console.log('Storage is full');
 		}
 	}
+
+	function shareHomework() {
+		try {
+			if (localStorage[lessonInfoForModal.lessonName]) {
+				try {
+				bridge.send("VKWebAppCopyText", {"text": `Д/З по ${lessonInfoForModal.lessonName}:\n${localStorage[lessonInfoForModal.lessonName]}`});
+				setSnackbar(
+					<Snackbar
+					  layout="horizontal"
+					  duration={1200}
+					  onClose={() => {
+							setSnackbar(null);
+							try {
+								bridge.send("VKWebAppShare", {"message": "https://vk.com/app7536016"});
+							} catch(e) {
+								console.log(e.error_type);
+							}
+					  }}
+					  before={<Avatar size={24} style={{backgroundColor: 'var(--accent)'}}><Icon16Done fill="#fff" width={14} height={14} /></Avatar>}
+					>
+					  Д/З скопировано в буфер обмена.
+					</Snackbar>
+				  );
+				} catch(e) {
+					console.log(e.error_type);
+				}
+			}
+		} catch(e) {
+			console.log(e);
+		}
+	}
 	
 	let modalCard = (
 		<ModalRoot activeModal={modal}>
@@ -162,6 +206,7 @@ const App = () => {
 					<Subhead weight="medium" style={{ marginBottom: 2 }}>
 						{lessonInfoForModal.lessonName}
 					</Subhead>
+					{snackbar}
 				</Div>
 				<Div className='modalCardDiv'>
 					<Headline weight="semibold">
@@ -196,13 +241,20 @@ const App = () => {
 					</Subhead>
 				</Div>
 				{!localStorage[lessonInfoForModal.lessonName] ||
-					<Div className='modalCardDiv'>
-						<Headline weight="semibold">
-							Домашнее задание
-						</Headline>
-						<Subhead weight="medium" style={{ marginBottom: 2 }}>
-							{lessonInfoForModal.homework}
-						</Subhead>
+					<Div className='modalCardDiv homework'>
+						<Div className='modalCardDiv'>
+							<Headline weight="semibold">
+								Домашнее задание
+							</Headline>
+							<Subhead weight="medium" style={{ marginBottom: 2 }}>
+								{lessonInfoForModal.homework}
+							</Subhead>
+						</Div>
+						{!/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ||
+							<Button mode='secondary' id='shareButton' onClick={shareHomework}>
+								<Icon24Share width={17} height={17}/>
+							</Button>
+						}
 					</Div>
 				}
 			</ModalCard>
