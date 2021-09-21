@@ -21,46 +21,6 @@ class Schedule extends React.Component {
 		super(props);
 	}
 	render() {
-		//const lessons = this.props.lessons;
-		const lessons = [
-			{
-				numberOfLesson: 1,
-				isSingle: true,
-				lessonName: 'Комп. сети',
-				lessonType: 'лекционное занятие',
-				auditorium: '2-103',
-				teacher: 'Горбачев Д. В.'},
-			{
-				numberOfLesson: 2,
-				isSingle: true,
-				lessonName: 'WEB-программирование',
-				lessonType: 'практическое занятие',
-				auditorium: '1-303',
-				teacher: 'Тагирова М. В.'},
-			{
-				numberOfLesson: 3,
-				isSingle: false,
-				subGroups: [
-					{
-						lessonName: 'Физ-ра (ю)',
-						lessonType: 'прaктическое занятие',
-						auditorium: '18-201',
-						teacher: 'Мышин П.П.'
-					},
-					{
-						lessonName: 'Физ-ра (д)',
-						lessonType: 'парктическое занятие',
-						auditorium: '1-202',
-						teacher: 'Валенок П.П.'
-					},
-					{
-						lessonName: 'Физ-ра (с)',
-						lessonType: 'парктическое занятие',
-						auditorium: '1-203',
-						teacher: 'Одноног П.П.'
-					},
-			]}
-		]
 		const date = this.props.dateForSchedule;
 		const lessonsIsEmpty = (lessons.length === 0);
 
