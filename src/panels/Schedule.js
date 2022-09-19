@@ -13,38 +13,47 @@ import Subhead from '@vkontakte/vkui/dist/components/Typography/Subhead/Subhead'
 import Text from '@vkontakte/vkui/dist/components/Typography/Text/Text';
 import Icon16InfoOutline from '@vkontakte/icons/dist/16/info_outline';
 
-
 const osName = platform();
 
-class Schedule extends React.Component {
-	constructor(props) {
-		super(props);
-	}
-	render() {
-		const date = this.props.dateForSchedule;
-		const lessonsIsEmpty = (lessons.length === 0);
+function capitalizeFirstLetter(string) {
+  return string.charAt(0).toUpperCase() + string.slice(1);
+}
 
-		return (
-			<Panel id={this.props.id}>
-				<PanelHeader
-					left={<PanelHeaderButton onClick={this.props.go} data-to="home">
-						{osName === IOS ? <Icon28ChevronBack/> : <Icon24Back/>}
-					</PanelHeaderButton>}>
-					Расписание
-				</PanelHeader>
-				<Group title="Schedule">
+function Schedule(props) {
+	return (
+		<Panel id={props.id}>
+			<PanelHeader
+				left={<PanelHeaderButton onClick={props.go} data-to="home">
+					{osName === IOS ? <Icon28ChevronBack/> : <Icon24Back/>}
+				</PanelHeaderButton>}>
+				Расписание
+			</PanelHeader>
+			<Group title="Schedule">
+				<Div id="lessions">
+					{props.days.length === 0
+					? <Title level="1" weight="semibold">{'Расписание недоступно'}</Title>
+					: <DaysOfWeek days={props.days} modalcallback={props.modalcallback}/>}
+				</Div>
+			</Group>
+		</Panel>
+	);
+}
+
+function DaysOfWeek(props) {
+	return (
+		<>
+			{props.days && props.days.map(day => 
+				<Div key={day.date}>
 					<Div id="date">
-						<Title level="2" weight="heavy">{date}</Title>
+						<Title level="2" weight="heavy">{day.date}</Title>
 					</Div>
-					<Div id="lessions">
-						{lessonsIsEmpty
-						? <Title level="2" weight="semibold">{'У группы нет пар в этот день.'}</Title>
-						: <PairList lessons={lessons} modalcallback={this.props.modalcallback}/>}
-					</Div>
-				</Group>
-			</Panel>
-		);
-	}
+					{!day.lessons || day.lessons.length === 0
+					? <p className='no-pair-title' weight="semibold">{'Нет пар в этот день'}</p>
+					: <PairList lessons={day.lessons} modalcallback={props.modalcallback}/>}
+				</Div>
+			)}
+		</>
+	)
 }
 
 function PairList(props) {
@@ -78,7 +87,7 @@ function SingleGroupPair(props) {
 					<Subhead weight="bold">{props.lesson.lessonName}</Subhead>
 				</Div>
 				<Div className='typeOfPair'>
-					<Text weight="regular">{props.lesson.lessonType}</Text>
+					<Text weight="regular">{capitalizeFirstLetter(props.lesson.lessonType)}</Text>
 				</Div>
 			</Div>
 			<Div className='auditoriumOfPair'>
@@ -103,7 +112,7 @@ function NotSingleGroupPair(props) {
 					<Div key={index} className='infoOfSingleSubGroup' onClick={props.modalcallback}
 					data-issingle={props.lesson.isSingle}
 					data-lessonname={subGroup.lessonName}
-					data-lessontype={subGroup.lessonType}
+					data-lessontype={capitalizeFirstLetter(subGroup.lessonType)}
 					data-numberoflesson={props.lesson.numberOfLesson}
 					data-auditorium={subGroup.auditorium}
 					data-teacher={subGroup.teacher}>

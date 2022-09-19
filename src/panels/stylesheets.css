@@ -123,6 +123,6 @@ body[scheme="space_gray"] {
   align-items: center;
   justify-content: space-between;
 }
-#shareButton {
+.no-pair-title {
+  text-align: center;
 }
-

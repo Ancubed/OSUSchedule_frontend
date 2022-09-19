@@ -14,7 +14,6 @@ import FormLayoutGroup from '@vkontakte/vkui/dist/components/FormLayoutGroup/For
 import logo from '../img/logo.png';
 import './stylesheets.css';
 
-
 class Home extends React.Component {
 	constructor(props) {
 		super(props);
@@ -35,7 +34,7 @@ class Home extends React.Component {
 
 	async loadGroups(faculty, potok) {
 		let groups = [];
-		const url = "https://vk-miniapps-osu-schedule-back.herokuapp.com/getgroups?faculty=" + faculty + "&potok=" + potok;
+		const url = "https://schedule.ancubed.me/getgroups?faculty=" + faculty + "&potok=" + potok;
 		let response = await fetch(url);
 		let json = await response.json();
 		groups = await json['groups'];
@@ -128,18 +127,18 @@ class Home extends React.Component {
 						<Select onChange={this.changeFaculty} placeholder="Факультет"
             			value={this.state.faculty}>
 							{this.props.faculty.map((fac) => 
-							<option value={fac.value}>{fac.label}</option>)}
+							<option key={fac.value} value={fac.value}>{fac.label}</option>)}
 						</Select>
 						<Select onChange={this.changeCourse} placeholder="Поток"
 						value={this.state.course}>
 							{this.props.course.map((cour) => 
-							<option value={cour.value}>{cour.label}</option>)}
+							<option key={cour.value} value={cour.value}>{cour.label}</option>)}
 						</Select>
 						{this.state.loadGroups ? <Spinner size='medium'/> :
 						<Select onChange={this.changeGroup} placeholder="Группа"
 						value={this.state.group}>
 							{this.state.groups.map((grop) => 
-							<option value={grop.value}>{grop.label}</option>)}
+							<option key={grop.value} value={grop.value}>{grop.label}</option>)}
 						</Select>}
 					</FormLayoutGroup>
 					<FormLayoutGroup top="Дата">

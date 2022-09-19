@@ -57,18 +57,10 @@ const App = () => {
 		8: ['20:00', '21:30'],
 	}
 	const [date, setDate] = useState(new Date().toISOString().substr(0, 10));
-	const [dateForSchedule, setDateForSchedule] = useState('');
 	const [activePanel, setActivePanel] = useState('home');
 	const [snackbar, setSnackbar] = useState(null);
 	const [fetchedUser, setUser] = useState(null);
-	const [lessons, setLessons] = useState([{
-		numberOfLesson: 0,
-		isSingle: true,
-		lessonName: "",
-		lessonType: "",
-		auditorium: "",
-		teacher: ""
-		}]);
+	const [days, setDays] = useState([]);
 	const [popout, setPopout] = useState(null);
 	const [modal, setModal] = useState(null);
 	const [lessonInfoForModal, setLessonInfoForModal] = useState({
@@ -110,33 +102,29 @@ const App = () => {
 	const go = e => {
 		if (e.currentTarget.dataset.to === "schedule") {
 		setPopout(<ScreenSpinner />);
-		scrapSchedule(e.currentTarget.dataset.group, e.currentTarget.dataset.date).then(function(json) {
-			setLessons(json.lessons);
-			setDateForSchedule(json.date);
+		scrapSchedule(e.currentTarget.dataset.group, e.currentTarget.dataset.date).then(function(daysSchedule) {
+			setDays(daysSchedule);
 			setPopout(null);
 		});
 		}
 		else if (e.currentTarget.dataset.to === "home") {
-			setLessons([{
-				numberOfLesson: 0,
-				isSingle: true,
-				lessonName: "",
-				lessonType: "",
-				auditorium: "",
-				teacher: ""
-				}]);
-				setDateForSchedule('')
+			setDays([]);
 		}
 		setActivePanel(e.currentTarget.dataset.to);
 	};
 
 	async function scrapSchedule(group, date) {
-		let lessons = []
-		const url = "https://vk-miniapps-osu-schedule-back.herokuapp.com/schedule?group=" + group + "&date=" + date;
-		let response = await fetch(url);
-		let json = await response.json();
-		lessons = await json;
-		return lessons;
+		let daysSchedule = []
+
+		try{
+			const url = "https://schedule.ancubed.me/schedule?group=" + group + "&date=" + date;
+			let response = await fetch(url);
+			daysSchedule = await response.json();
+		} catch (err) {
+			console.log(err);
+		}
+		
+		return daysSchedule;
 	};
 
 	function homeworkChange(e) {
@@ -292,7 +280,7 @@ const App = () => {
 	return (
 		<View activePanel={activePanel} popout={popout} modal={modalCard}>
 			<Home id='home' faculty={faculty} course={course} date={date} go={go} />
-			<Schedule id='schedule' lessons={lessons} dateForSchedule={dateForSchedule} go={go} modalcallback={modalcallback}/>
+			<Schedule id='schedule' days={days} go={go} modalcallback={modalcallback}/>
 		</View>
 	);
 }
